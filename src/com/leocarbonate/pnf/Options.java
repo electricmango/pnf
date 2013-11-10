@@ -17,6 +17,8 @@ public class Options extends JPanel implements ActionListener{
     public static JCheckBox autoscroll;
     public static JCheckBox doneautoscroll;
     
+    public static JCheckBox clear;
+            
     public static JCheckBox fileout;
     public static JButton filechoose;
     public static JFileChooser filelocation;
@@ -27,6 +29,7 @@ public class Options extends JPanel implements ActionListener{
     public static boolean AutoScrollAfterFinish = true;
     public static boolean AlertAfterFinish = true;
     public static boolean WriteToFile = false;
+    public static boolean ClearOutputAfterFinish = false;
     
     public Options(){
         super(new GridBagLayout());
@@ -58,6 +61,17 @@ public class Options extends JPanel implements ActionListener{
         c.weightx = 0.01;
         c.weighty = 1.0;
         add(doneautoscroll,c);
+        
+        clear = new JCheckBox("Clear Output After Finish",false);
+        clear.setActionCommand("clear");
+        clear.addActionListener(this);
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 0.01;
+        c.weighty = 1.0;
+        add(clear,c);
         
         fileout = new JCheckBox("Output to file ...",false);
         fileout.setActionCommand("fileout");
@@ -102,6 +116,12 @@ public class Options extends JPanel implements ActionListener{
                 AutoScrollAfterFinish = true;
             } else {
                 AutoScrollAfterFinish = false;
+            }
+        } else if("clear".equals(ae.getActionCommand())){
+            if(clear.isSelected() == true){
+                ClearOutputAfterFinish = true;
+            } else {
+                ClearOutputAfterFinish = false;
             }
         } else if("fileout".equals(ae.getActionCommand())){
             if(fileout.isSelected() == true){

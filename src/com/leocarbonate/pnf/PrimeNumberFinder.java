@@ -34,7 +34,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
     
     public static JTextArea out;
     public static JScrollPane outscroll;
-    
+    public static JTextField minimum;
     public static JTextField maximum;
     public static JButton setmax;
     public static JPanel program;
@@ -55,17 +55,19 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
     
     private static getJob gj;
     
-    public static int max = 2;
+    private int max = 2;
+    private int min = 0;
     public static boolean done = false;
     
     byte entered = 0;
     
     final static boolean shouldFill = true;
     
+    
     public PrimeNumberFinder() throws IOException{
         super("Prime Number Finder");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(true);
+        setResizable(false);
         setSize(400,400);
                 
         GridBagConstraints c = new GridBagConstraints();
@@ -126,13 +128,24 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
         c.weighty = 1.0;
         program.add(new JScrollPane(out),c);
         
+        minimum = new JTextField("Minimum",8);
+        minimum.setActionCommand("setmax");
+        minimum.addActionListener(this);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 1.0;
+        c.weighty = 0.001;
+        program.add(minimum,c);
+        
         maximum = new JTextField("Maximum",8);
         maximum.selectAll();
         maximum.setActionCommand("setmax");
         maximum.addActionListener(this);
-        c.gridx = 0;
+        c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 2;
+        c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 1.0;
         c.weighty = 0.001;
@@ -213,6 +226,9 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
     public void start(){
         toggle.setActionCommand("stop");
         toggle.setText("Stop");
+        if(Options.ClearOutputAfterFinish == true){
+            out.setText(null);
+        }
         gj = new getJob();
         gj.execute();
         done = false;
@@ -235,11 +251,23 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
             
             setmax.setSelected(true);
             
-            double d = Double.parseDouble(maximum.getText());
-            max = (int)d;
-            System.out.println("Set max to: " + max);
+            if(setmax.isSelected() == true){
+                ++entered;
+            }
+            String maxs = maximum.getText();
+            String mins = minimum.getText();
             
-            progress.setMaximum(max);
+            //text if string
+            
+            double d = Double.parseDouble(maxs);
+            max = (int)d;
+            double f = Double.parseDouble(mins);
+            min = (int)f;
+            System.out.println("Set min to: " + min);
+            System.out.println("Set max to: " + max);
+            left.setText("Left: " + (max - min));
+            
+            progress.setMaximum(max - min);
             if(setmax.isSelected() == true && entered == 2){
                 toggle.setSelected(true);
                 start();
@@ -255,8 +283,11 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
         
         @Override
         protected Integer doInBackground() throws Exception {
-            int j = 2, k = 0;
+            int j = min, k = 0;
             while (!isCancelled()) {
+                if(j < 2){
+                    j = 2;
+                }
                 if(isPrime(j)) {
                     ++k;
                     //System.out.println(j);
@@ -264,7 +295,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener{
                     
                     tested.setText("Tested: " + j);
                     counted.setText("Counted: " + k);
-                    left.setText("Left: " + (max - j));
+                    left.setText("Left: " + ((max - min) - j));
                 }
                     
                 progress.setValue(j);
