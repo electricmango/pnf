@@ -1,10 +1,12 @@
 Prime Number Finder
+===========
 
-version.txt
+*version.txt*
 
 
 
 BETA
+--------------
 
 0.b1.1.0
 	- You can now choose the minimum limit (the number to start finding prime numbers from)
