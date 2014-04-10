@@ -1,11 +1,9 @@
 Prime Number Finder
-===========
 
-*version.txt*
-
+version.txt
 
 
-BETA
+Beta
 --------------
 
 0.b1.1.0
