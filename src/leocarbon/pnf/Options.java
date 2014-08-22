@@ -4,10 +4,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 public class Options extends JPanel implements ActionListener {
     public JCheckBox autoscroll;
@@ -31,63 +33,76 @@ public class Options extends JPanel implements ActionListener {
         setLayout(new GridBagLayout());
         
         GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        
+        JPanel process = new JPanel(new GridBagLayout()); {
+            autoscroll = new JCheckBox("Scroll",false);
+            autoscroll.setActionCommand("autoscroll");
+            autoscroll.addActionListener(this);
+            autoscroll.setEnabled(false);
+            c.gridx = 0;
+            c.gridy = 0;
+            c.gridwidth = 2;
+            process.add(autoscroll,c);
+        }
+        process.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"During Process: "));
+        c.gridx = 0;
+        c.gridy = 0;
         c.fill = GridBagConstraints.BOTH;
+        add(process,c);
         
-        autoscroll = new JCheckBox("Auto Scroll During Process",false);
-        autoscroll.setActionCommand("autoscroll");
-        autoscroll.addActionListener(this);
-        autoscroll.setEnabled(false);
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        add(autoscroll,c);
-        
-        doneautoscroll = new JCheckBox("Auto Scroll After Finish",true);
-        doneautoscroll.setActionCommand("doneautoscroll");
-        doneautoscroll.addActionListener(this);
-        c.gridx = 1;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        add(doneautoscroll,c);
-        
-        fileout = new JCheckBox("Output to file ...",false);
-        fileout.setActionCommand("fileout");
-        fileout.addActionListener(this);
+        JPanel output = new JPanel(new GridBagLayout()); {
+            fileout = new JCheckBox("Output to file ...",false);
+            fileout.setActionCommand("fileout");
+            fileout.addActionListener(this);
+            c.gridx = 0;
+            c.gridy = 0;
+            c.gridwidth = 1;
+            output.add(fileout,c);
+
+            filechoose = new JButton("Choose file");
+            filechoose.setActionCommand("choosefile");
+            filechoose.addActionListener(this);
+            filechoose.setEnabled(false);
+            c.gridx = 0;
+            c.gridy = 1;
+            output.add(filechoose,c);
+        }
+        output.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"Output"));
         c.gridx = 0;
         c.gridy = 1;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        add(fileout,c);
+        c.fill = GridBagConstraints.BOTH;
+        add(output,c);
         
-        filechoose = new JButton("Choose file");
-        filechoose.setActionCommand("choosefile");
-        filechoose.addActionListener(this);
-        filechoose.setEnabled(false);
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        add(filechoose,c);
-        
-        alert = new JCheckBox("Alert on finish",true);
-        alert.setActionCommand("alert");
-        alert.addActionListener(this);
+        JPanel finish = new JPanel(new GridBagLayout()); {
+            alert = new JCheckBox("Alert",true);
+            alert.setActionCommand("alert");
+            alert.addActionListener(this);
+            c.gridx = 0;
+            c.gridy = 0;
+            finish.add(alert,c);
+
+            doneautoscroll = new JCheckBox("Auto Scroll",true);
+            doneautoscroll.setActionCommand("doneautoscroll");
+            doneautoscroll.addActionListener(this);
+            c.gridx = 0;
+            c.gridy = 1;
+            finish.add(doneautoscroll,c);
+
+            clear = new JCheckBox("Clear Output",false);
+            clear.setActionCommand("clear");
+            clear.addActionListener(this);
+            c.gridx = 0;
+            c.gridy = 2;
+            finish.add(clear,c);
+        }
+        finish.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"After Finish: "));
         c.gridx = 0;
         c.gridy = 2;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        add(alert,c);
+        c.fill = GridBagConstraints.BOTH;
+        add(finish,c);
         
-        clear = new JCheckBox("Clear Output After Finish",false);
-        clear.setActionCommand("clear");
-        clear.addActionListener(this);
-        c.gridx = 1;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        add(clear,c);
+        setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
     }
 
     @Override

@@ -5,6 +5,10 @@ version.txt
 
 Beta(β)
 --------------
+0.β2.0.1 (8.22.14)
+	- Options will open in the same window as the actual program
+	- Organized the options
+
 0.β2.0.0 (8.21.14)
 	- JDK 1.8
 	- Removed lcsoft logo and renamed packages

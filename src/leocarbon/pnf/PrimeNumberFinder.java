@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -165,7 +166,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         add(program);
         
         options = new Options();
-        
+    
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -202,20 +203,22 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent AE) {
         switch(AE.getActionCommand()){
             case "options":
-                System.out.println("options");
-                if(inoptions){
-                    inoptions = false;
+                if(!inoptions){
+                    remove(program);
+                    program.remove(optionsJB);
+                    optionsJB.setText("Program");
+                    options.add(optionsJB);
+                    add(options);
                 } else {
-                    inoptions = true;
+                    remove(options);
+                    options.remove(optionsJB);
+                    optionsJB.setText("Options");
+                    program.add(optionsJB);
+                    add(program);
                 }
-                
-                JFrame o = new JFrame();
-                o.add(options);
-                o.pack();
-                o.setLocationRelativeTo(null);
-                o.setVisible(true);
-                o.setResizable(false);
-                
+                inoptions = !inoptions;
+                repaint();
+                revalidate();
                 break;
             case "start":
                 start();
