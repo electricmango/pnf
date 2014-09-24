@@ -13,6 +13,10 @@ version.md
 
 Beta(β)
 --------------
+#####0.β2.1.0 (9.24.14)
+* Auto scrolling works
+* Now times the elapsed time
+	
 ######0.β2.0.1 (8.22.14)
 * Options will open in the same window as the actual program
 * Organized the options

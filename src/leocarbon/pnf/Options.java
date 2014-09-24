@@ -10,9 +10,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.text.DefaultCaret;
+import static leocarbon.pnf.PrimeNumberFinder.PNF;
 
 public class Options extends JPanel implements ActionListener {
     public JCheckBox autoscroll;
+    
+    public JCheckBox count;
+    
     public JCheckBox doneautoscroll;
     
     public JCheckBox clear;
@@ -23,7 +28,8 @@ public class Options extends JPanel implements ActionListener {
     
     public JCheckBox alert;
     
-    public static boolean AutoScrollDuringProcess;
+    public static boolean AutoScrollDuringProcess = true;
+    public boolean countb = true;
     public static boolean AutoScrollAfterFinish = true;
     public static boolean AlertAfterFinish = true;
     public static boolean WriteToFile = false;
@@ -36,18 +42,25 @@ public class Options extends JPanel implements ActionListener {
         c.fill = GridBagConstraints.HORIZONTAL;
         
         JPanel process = new JPanel(new GridBagLayout()); {
-            autoscroll = new JCheckBox("Scroll",false);
+            autoscroll = new JCheckBox("Scroll",true);
             autoscroll.setActionCommand("autoscroll");
             autoscroll.addActionListener(this);
-            autoscroll.setEnabled(false);
             c.gridx = 0;
             c.gridy = 0;
             c.gridwidth = 2;
             process.add(autoscroll,c);
+            
+            count = new JCheckBox("Extra count data",true);
+            count.setActionCommand("calc");
+            count.addActionListener(this);
+            count.setEnabled(false);
+            c.gridy = 1;
+            process.add(count,c);
         }
         process.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"During Process: "));
         c.gridx = 0;
         c.gridy = 0;
+        c.gridwidth = 1;
         c.fill = GridBagConstraints.BOTH;
         add(process,c);
         
@@ -97,8 +110,9 @@ public class Options extends JPanel implements ActionListener {
             finish.add(clear,c);
         }
         finish.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"After Finish: "));
-        c.gridx = 0;
-        c.gridy = 2;
+        c.gridx = 1;
+        c.gridy = 0;
+        c.gridheight = 2;
         c.fill = GridBagConstraints.BOTH;
         add(finish,c);
         
@@ -109,6 +123,18 @@ public class Options extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent AE) {
         switch (AE.getActionCommand()) {
             case "autoscroll":
+                AutoScrollDuringProcess = autoscroll.isSelected();
+                if(AutoScrollDuringProcess){
+                    DefaultCaret outcaret = (DefaultCaret)PNF.out.getCaret();
+                    outcaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+                    AutoScrollAfterFinish = true;
+                } else {
+                    DefaultCaret outcaret = (DefaultCaret)PNF.out.getCaret();
+                    outcaret.setUpdatePolicy(DefaultCaret.UPDATE_WHEN_ON_EDT);
+                }
+                break;
+            case "calc":
+                countb = count.isSelected();
                 break;
             case "doneautoscroll":
                 if(doneautoscroll.isSelected() == true){
