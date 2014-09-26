@@ -5,6 +5,10 @@ version.txt
 
 Beta(β)
 --------------
+0.β2.2.0 (9.27.14)
+	- Removed the time remaining text and code
+	- Now shows elapsed time in a real time format (hours:minutes:seconds:milliseconds)
+
 0.β2.1.0 (9.24.14)
 	- Auto scrolling works
 	- Now times the elapsed time

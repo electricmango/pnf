@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -160,13 +161,14 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         program.add(numbers,c);
         
         JPanel time = new JPanel(new GridLayout(1,0)); {
-            timee = new JLabel("Milliseconds elapsed: 0");
+            timee = new JLabel("Milliseconds elapsed: 00:00:00.000");
             timee.setHorizontalAlignment(SwingConstants.CENTER);
             time.add(timee);
-
+            /*
             timel = new JLabel("Estimated time left: null");
             timel.setHorizontalAlignment(SwingConstants.CENTER);
             time.add(timel);
+                    */
         } c.gridy = 4;
         c.gridwidth = 4;
         program.add(time,c);
@@ -305,9 +307,10 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 progress.setValue(j);
                 ctime = System.nanoTime();
                 etime = (ctime - stime)/1000000;
-                //ltime = l/(j/etime)/1000;  Work on------------Í
-                timee.setText("Milliseconds elapsed: "+etime);
-                timel.setText("Estimated time left: "+ltime);
+                //ltime = l/(j/etime)/1000; unused, maybe later.
+                
+                timee.setText("Time elapsed: "+(etime/1000/60/60)%60+":"+(etime/1000/60)%60+":"+(etime/1000)%60+"."+etime%1000);
+                //timel.setText("Estimated time left: "+ltime);
                 
                 ++j;
                 if(!(j <= max)) break;
