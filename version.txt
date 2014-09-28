@@ -5,6 +5,11 @@ version.txt
 
 Beta(β)
 --------------
+0.β2.3.0 (9.28.14)
+	- added a proper time format for elapsed time text
+	- added logging, with options
+	- added Mac GUI optimization
+
 0.β2.2.0 (9.27.14)
 	- Removed the time remaining text and code
 	- Now shows elapsed time in a real time format (hours:minutes:seconds:milliseconds)

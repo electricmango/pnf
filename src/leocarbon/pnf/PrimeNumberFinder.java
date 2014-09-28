@@ -7,14 +7,10 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,12 +27,17 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.text.DefaultCaret;
 import static leocarbon.pnf.Options.AutoScrollDuringProcess;
-import static leocarbon.pnf.Options.WriteToFile;
+import static leocarbon.pnf.Options.dologging;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.simplericity.macify.eawt.Application;
+import org.simplericity.macify.eawt.ApplicationEvent;
+import org.simplericity.macify.eawt.ApplicationListener;
+import org.simplericity.macify.eawt.DefaultApplication;
 
 public class PrimeNumberFinder extends JFrame implements ActionListener {
     public static PrimeNumberFinder PNF;
+    private static Application eawt;
     
     public static JMenuBar menubar;
     public static JMenu menu;
@@ -76,9 +77,22 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
     byte entered = 0;
     
     public static void main(String[] arguments) {
+        if(System.getProperty("os.name").toLowerCase().contains("mac")){
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Color Utility");
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+        }
         PNF = new PrimeNumberFinder();
     } public PrimeNumberFinder() {
         PropertyConfigurator.configure(getClass().getResource("/leocarbon/pnf/logging/log4j.properties"));
+        
+        //Extra implementations for Mac OS
+        if(System.getProperty("os.name").toLowerCase().contains("mac")){
+            eawt = new DefaultApplication();
+            eawt.addApplicationListener(new MacOSXHandler());
+            eawt.addPreferencesMenuItem();
+            eawt.setEnabledPreferencesMenu(true);
+            if(dologging) Logger.getLogger(PrimeNumberFinder.class.getName()).trace("Optimized GUI for Mac OS");
+        }
         
         setTitle("Prime Number Finder");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -161,7 +175,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         program.add(numbers,c);
         
         JPanel time = new JPanel(new GridLayout(1,0)); {
-            timee = new JLabel("Milliseconds elapsed: 00:00:00.000");
+            timee = new JLabel("Time elapsed: 00:00:00.000");
             timee.setHorizontalAlignment(SwingConstants.CENTER);
             time.add(timee);
             /*
@@ -269,8 +283,10 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                     double f = Double.parseDouble(mins);
                     min = (int)f;
                     
-                    System.out.println("Set min to: " + min);
-                    System.out.println("Set max to: " + max);
+                    if(dologging){
+                        Logger.getLogger(PrimeNumberFinder.class.getName()).info("Set min to: " + min);
+                        Logger.getLogger(PrimeNumberFinder.class.getName()).info("Set max to: " + max);
+                    }
                     left.setText("Left: " + (max - min));
                     
                     progress.setMaximum(max - min);
@@ -297,7 +313,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                         try {
                             writer.append(Integer.toString(j) + "\n");
                         } catch (IOException IOE) {
-                            Logger.getLogger(PrimeNumberFinder.class.getName()).error(IOE);
+                            if(dologging) Logger.getLogger(PrimeNumberFinder.class.getName()).error(IOE);
                         }
                         out.append(Integer.toString(j) + "\n");
                     tested.setText("Tested: " + j);
@@ -309,7 +325,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 etime = (ctime - stime)/1000000;
                 //ltime = l/(j/etime)/1000; unused, maybe later.
                 
-                timee.setText("Time elapsed: "+(etime/1000/60/60)%60+":"+(etime/1000/60)%60+":"+(etime/1000)%60+"."+etime%1000);
+                timee.setText(String.format("Time elapsed: %02d:%02d:%02d.%03d",(etime/1000/60/60)%60,(etime/1000/60)%60,(etime/1000)%60,etime%1000));
                 //timel.setText("Estimated time left: "+ltime);
                 
                 ++j;
@@ -339,8 +355,28 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
             try {
                 writer.close();
             } catch (IOException IOE) {
-                Logger.getLogger(PrimeNumberFinder.class.getName()).warn(IOE);
+                if(dologging) Logger.getLogger(FindPrimeNumbers.class.getName()).warn(IOE);
             }
         }
+    }
+    public class MacOSXHandler implements ApplicationListener {
+        @Override
+        public void handlePreferences(ApplicationEvent AE) {
+            PNF.actionPerformed(new ActionEvent((Object)this, -1, "options"));
+            AE.setHandled(true);
+        }
+        @Override
+        public void handleQuit(ApplicationEvent AE) {
+            PNF.setVisible(false);
+            PNF.dispose();
+            PNF = null;
+            System.gc();
+            AE.setHandled(true);
+        } @Override
+        public void handleAbout(ApplicationEvent AE) {} @Override
+        public void handleOpenApplication(ApplicationEvent AE) {} @Override
+        public void handleOpenFile(ApplicationEvent AE) {} @Override
+        public void handlePrintFile(ApplicationEvent AE) {} @Override
+        public void handleReOpenApplication(ApplicationEvent AE) {}
     }
 }

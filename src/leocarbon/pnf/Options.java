@@ -15,25 +15,22 @@ import static leocarbon.pnf.PrimeNumberFinder.PNF;
 
 public class Options extends JPanel implements ActionListener {
     public JCheckBox autoscroll;
-    
     public JCheckBox count;
-    
-    public JCheckBox doneautoscroll;
-    
-    public JCheckBox clear;
-            
     public JCheckBox fileout;
     public JButton filechoose;
     public JFileChooser filelocation;
-    
     public JCheckBox alert;
+    public JCheckBox doneautoscroll;
+    public JCheckBox clear;
+    public JCheckBox logging;
     
     public static boolean AutoScrollDuringProcess = true;
-    public boolean countb = true;
+    public static boolean countb = true;
     public static boolean AutoScrollAfterFinish = true;
     public static boolean AlertAfterFinish = true;
     public static boolean WriteToFile = false;
     public static boolean ClearOutputAfterFinish = false;
+    public static boolean dologging = false;
     
     public Options() {
         setLayout(new GridBagLayout());
@@ -71,6 +68,7 @@ public class Options extends JPanel implements ActionListener {
             c.gridx = 0;
             c.gridy = 0;
             c.gridwidth = 1;
+            c.fill = GridBagConstraints.HORIZONTAL;
             output.add(fileout,c);
 
             filechoose = new JButton("Choose file");
@@ -93,6 +91,7 @@ public class Options extends JPanel implements ActionListener {
             alert.addActionListener(this);
             c.gridx = 0;
             c.gridy = 0;
+            c.fill = GridBagConstraints.HORIZONTAL;
             finish.add(alert,c);
 
             doneautoscroll = new JCheckBox("Auto Scroll",true);
@@ -115,6 +114,22 @@ public class Options extends JPanel implements ActionListener {
         c.gridheight = 2;
         c.fill = GridBagConstraints.BOTH;
         add(finish,c);
+        
+        JPanel loggingp = new JPanel(new GridBagLayout()); {
+            logging = new JCheckBox("Logging",false);
+            logging.setActionCommand("logging");
+            logging.addActionListener(this);
+            c.gridx = 0;
+            c.gridheight = 1;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            loggingp.add(logging);
+        }
+        loggingp.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"Logging: "));
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 2;
+        c.gridy = 0;
+        c.gridheight = 2;
+        add(loggingp,c);
         
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
     }
@@ -164,6 +179,9 @@ public class Options extends JPanel implements ActionListener {
                 } else {
                     AlertAfterFinish = false;
                 } break;
+            case "logging":
+                dologging = logging.isSelected();
+                break;
         }
     }
 }
