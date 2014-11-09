@@ -1,16 +1,10 @@
 package leocarbon.pnf;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
-import javax.swing.text.DefaultCaret;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.text.*;
 import static leocarbon.pnf.PrimeNumberFinder.PNF;
 
 public class Options extends JPanel implements ActionListener {
@@ -23,6 +17,7 @@ public class Options extends JPanel implements ActionListener {
     public JCheckBox doneautoscroll;
     public JCheckBox clear;
     public JCheckBox logging;
+    public JLabel info;
     
     public static boolean AutoScrollDuringProcess = true;
     public static boolean countb = true;
@@ -131,6 +126,13 @@ public class Options extends JPanel implements ActionListener {
         c.gridheight = 2;
         add(loggingp,c);
         
+        info = new JLabel("<html>Prime Number Finder is by leocarbon.<br>github.com/leocarbon/pnf</html>");
+        info.setHorizontalAlignment(SwingConstants.CENTER);
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridheight = 1;
+        c.gridwidth = 4;
+        add(info,c);
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
     }
 
@@ -152,19 +154,19 @@ public class Options extends JPanel implements ActionListener {
                 countb = count.isSelected();
                 break;
             case "doneautoscroll":
-                if(doneautoscroll.isSelected() == true){
+                if(doneautoscroll.isSelected()){
                     AutoScrollAfterFinish = true;
                 } else {
                     AutoScrollAfterFinish = false;
                 } break;
             case "clear":
-                if(clear.isSelected() == true){
+                if(clear.isSelected()){
                     ClearOutputAfterFinish = true;
                 } else {
                     ClearOutputAfterFinish = false;
                 } break;
             case "fileout":
-                if(fileout.isSelected() == true){
+                if(fileout.isSelected()){
                     filechoose.setEnabled(true);
                     WriteToFile = true;
                 } else {
@@ -174,7 +176,7 @@ public class Options extends JPanel implements ActionListener {
             case "choosefile":
                 break;
             case "alert":
-                if(alert.isSelected() == true){
+                if(alert.isSelected()){
                     AlertAfterFinish = true;
                 } else {
                     AlertAfterFinish = false;

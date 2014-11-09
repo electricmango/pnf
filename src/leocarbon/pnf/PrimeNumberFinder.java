@@ -1,39 +1,14 @@
 package leocarbon.pnf;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
-import javax.swing.text.DefaultCaret;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.text.*;
 import static leocarbon.pnf.Options.AutoScrollDuringProcess;
 import static leocarbon.pnf.Options.dologging;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.simplericity.macify.eawt.Application;
-import org.simplericity.macify.eawt.ApplicationEvent;
-import org.simplericity.macify.eawt.ApplicationListener;
-import org.simplericity.macify.eawt.DefaultApplication;
+import org.apache.log4j.*;
+import org.simplericity.macify.eawt.*;
 
 public class PrimeNumberFinder extends JFrame implements ActionListener {
     public static PrimeNumberFinder PNF;
@@ -47,7 +22,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
     public JButton optionsJB;
     public boolean inoptions = false;
     
-    public JToggleButton toggle;
+    public JButton toggle;
     public JProgressBar progress;
     
     public JTextArea out;
@@ -121,6 +96,11 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         c.gridx = 2;
         program.add(setmax,c);
         
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),"space");
+        getRootPane().getActionMap().put("space", new AbstractAction(){ @Override public void actionPerformed(ActionEvent e){
+            setmax.doClick();
+        }});
+        
         optionsJB = new JButton("Options");
         optionsJB.setActionCommand("options");
         optionsJB.addActionListener(this);
@@ -150,7 +130,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         c.gridwidth = 3;
         program.add(progress,c);
         
-        toggle = new JToggleButton("Start");
+        toggle = new JButton("Start");
         toggle.setActionCommand("start");
         toggle.addActionListener(this);
         c.gridx = 3;
@@ -233,6 +213,10 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         
         toggle.setActionCommand("start");
         toggle.setText("Start");
+        
+        toggle.setSelected(false);
+        setmax.setSelected(false);
+        
         stime = ctime = etime = ltime = 0;
         done = true;
     }
@@ -266,22 +250,19 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 break;
             case "enter":
                 actionPerformed(new ActionEvent((Object)this,-1,"setmax"));
-                toggle.setSelected(true);
-                toggle.requestFocus();
-                start();
+                setmax.setSelected(true);
+                setmax.requestFocus();
                 break;
             case "setmax":
                 if(done){
                     String maxs, mins;
                     if(maximum.getText().matches("[0-9]+")) maxs = maximum.getText();
                     else maximum.setText(maxs = Integer.toString(Integer.MAX_VALUE));
-                    double d = Double.parseDouble(maxs);
-                    max = (int)d;
+                    max = Integer.parseInt(maxs);
                     
                     if(minimum.getText().matches("[0-9]+")) mins = minimum.getText();
                     else minimum.setText(mins = "0");
-                    double f = Double.parseDouble(mins);
-                    min = (int)f;
+                    min = Integer.parseInt(mins);
                     
                     if(dologging){
                         Logger.getLogger(PrimeNumberFinder.class.getName()).info("Set min to: " + min);
@@ -290,16 +271,15 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                     left.setText("Left: " + (max - min));
                     
                     progress.setMaximum(max - min);
-                    if(setmax.isSelected() && entered == 2){
+                    if(setmax.isSelected()){
                         toggle.setSelected(true);
                         start();
-                        entered = 0;
                     }
                 } break;
         }
     }
     
-    public class FindPrimeNumbers extends SwingWorker<Integer, Integer>{
+    public class FindPrimeNumbers extends SwingWorker<Integer,Integer> {
         int p = 0;
         int i;
         @Override
@@ -309,7 +289,6 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 if(j < 2) j = 2;
                 if(isPrime(j)){
                     ++k;
-                    --l;
                         try {
                             writer.append(Integer.toString(j) + "\n");
                         } catch (IOException IOE) {
@@ -329,13 +308,14 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 //timel.setText("Estimated time left: "+ltime);
                 
                 ++j;
+                --l;
                 if(!(j <= max)) break;
             }
             return i;
         }
         
         public boolean isPrime(int j) {
-            for(int asd=2; asd<j; asd++) if(j%asd == 0) return false;
+            for(int d = 2; d < j; ++d) if(j%d == 0) return false;
             return true;
         }
         @Override
@@ -349,8 +329,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 out.setCaretPosition(out.getDocument().getLength());
             }
             
-            toggle.setSelected(false);
-            setmax.setSelected(false);
+            stop();
             
             try {
                 writer.close();

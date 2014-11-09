@@ -13,6 +13,9 @@ version.md
 
 Beta(β)
 --------------
+######0.β2.4.0 (11.9.14)
+* many optimizations and cleanups.
+	
 ######0.β2.3.0 (9.28.14)
 * added a proper time format for elapsed time text
 * added logging, with options
