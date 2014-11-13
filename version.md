@@ -11,6 +11,12 @@
 version.md
 ---
 
+Releases
+--------------
+######0.2.5.0 (11.13.14)
+* actually usable
+* output prime numbers to a (text) file of your choice.
+	
 Beta(β)
 --------------
 ######0.β2.4.0 (11.9.14)

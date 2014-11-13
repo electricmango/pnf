@@ -188,10 +188,12 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
             out.setText(null);
         }
         try {
-            output = new File("Prime Numbers.txt");
-            if (!output.exists()) output.createNewFile();
-            filer = new FileWriter(output.getAbsoluteFile());
-            writer = new BufferedWriter(filer);
+            if(options.fileout.isSelected()){
+                if(output == null) options.choosefile();
+                if(!output.exists()) output.createNewFile();
+                filer = new FileWriter(output.getAbsoluteFile());
+                writer = new BufferedWriter(filer);
+            }
         } catch (IOException IOE) {
             Logger.getLogger(PrimeNumberFinder.class.getName()).warn(IOE);
         }
@@ -209,7 +211,11 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         
         options.autoscroll.setEnabled(true);
         options.fileout.setEnabled(true);
-        options.filechoose.setEnabled(true);
+        if(options.fileout.isSelected()) options.filechoose.setEnabled(true);
+        
+        output = null;
+        filer = null;
+        writer = null;
         
         toggle.setActionCommand("start");
         toggle.setText("Start");
@@ -290,7 +296,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
                 if(isPrime(j)){
                     ++k;
                         try {
-                            writer.append(Integer.toString(j) + "\n");
+                            if(writer != null) writer.append(Integer.toString(j) + "\n");
                         } catch (IOException IOE) {
                             if(dologging) Logger.getLogger(PrimeNumberFinder.class.getName()).error(IOE);
                         }
@@ -332,7 +338,10 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
             stop();
             
             try {
-                writer.close();
+                if(writer != null){
+                    writer.flush();
+                    writer.close();
+                }
             } catch (IOException IOE) {
                 if(dologging) Logger.getLogger(FindPrimeNumbers.class.getName()).warn(IOE);
             }

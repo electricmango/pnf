@@ -2,6 +2,7 @@ package leocarbon.pnf;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.*;
@@ -135,7 +136,7 @@ public class Options extends JPanel implements ActionListener {
         add(info,c);
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent AE) {
         switch (AE.getActionCommand()) {
@@ -174,6 +175,7 @@ public class Options extends JPanel implements ActionListener {
                     WriteToFile = false;
                 } break;
             case "choosefile":
+                choosefile();
                 break;
             case "alert":
                 if(alert.isSelected()){
@@ -184,6 +186,16 @@ public class Options extends JPanel implements ActionListener {
             case "logging":
                 dologging = logging.isSelected();
                 break;
+        }
+    }
+    
+    public void choosefile(){
+        FileDialog fd = new FileDialog(new JFrame(), "Choose File", FileDialog.SAVE);
+        fd.setFile("*.txt");
+        fd.setVisible(true);
+
+        if(fd.getFile() != null){
+            PNF.output = new File(fd.getDirectory()+"/"+fd.getFile());
         }
     }
 }
