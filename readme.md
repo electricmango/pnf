@@ -1,11 +1,10 @@
 #Prime Number Finder
 
-####by Leocarbon
+####by Daniel Jang
 
+<https://electricmango.github.io>
 
-<https://leocarbon.github.io>
-
-<realleocarbon@gmail.com>
+<minhyukjang@gmail.com>
   
 ---
 readme.md
