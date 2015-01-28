@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.*;
 import static leocarbon.pnf.PrimeNumberFinder.PNF;
+import org.apache.log4j.PropertyConfigurator;
 
 public class Options extends JPanel implements ActionListener {
     public JCheckBox autoscroll;
@@ -184,6 +185,7 @@ public class Options extends JPanel implements ActionListener {
                     AlertAfterFinish = false;
                 } break;
             case "logging":
+                if(!dologging) PropertyConfigurator.configure(getClass().getResource("/leocarbon/pnf/logging/log4j.properties"));
                 dologging = logging.isSelected();
                 break;
         }

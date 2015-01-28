@@ -58,7 +58,7 @@ public class PrimeNumberFinder extends JFrame implements ActionListener {
         }
         PNF = new PrimeNumberFinder();
     } public PrimeNumberFinder() {
-        PropertyConfigurator.configure(getClass().getResource("/leocarbon/pnf/logging/log4j.properties"));
+        if(dologging) PropertyConfigurator.configure(getClass().getResource("/leocarbon/pnf/logging/log4j.properties"));
         
         //Extra implementations for Mac OS
         if(System.getProperty("os.name").toLowerCase().contains("mac")){
