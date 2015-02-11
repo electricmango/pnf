@@ -1,10 +1,6 @@
 #Prime Number Finder
 
 ####by Daniel Jang
-
-<https://electricmango.github.io>
-
-<minhyukjang@gmail.com>
   
 ---
 readme.md
