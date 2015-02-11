@@ -1,7 +1,7 @@
 #Prime Number Finder
 
 ####by Daniel Jang
-  
+
 ---
 readme.md
 ---
