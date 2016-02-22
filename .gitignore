@@ -1,0 +1,8 @@
+/build/*
+/dist/*
+/store/*
+
+
+# development
+/test/*
+*.log
