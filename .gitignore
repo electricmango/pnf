@@ -1,6 +1,10 @@
+# NetBeans-generated
 /build/*
 /dist/*
 /store/*
+manifest.mf
+/nbproject/private/*
+
 
 
 # development
