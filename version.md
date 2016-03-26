@@ -2,7 +2,7 @@
 #version.md
 
 
-###Releases
+###releases
 
 ######0.2.6.0 (1.28.15)
 * logging is an option now
@@ -12,7 +12,7 @@
 * output prime numbers to a (text) file of your choice.
 	
 	
-###Beta(β)
+###beta(β)
 
 ######0.β2.4.0 (11.9.14)
 * many optimizations and cleanups.
